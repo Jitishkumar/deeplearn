@@ -1,0 +1,30 @@
+# Web Framework
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Database (SQLite only)
+sqlalchemy
+
+# Authentication
+python-jose[cryptography]
+passlib[bcrypt]
+
+# Data Processing
+pandas
+numpy
+
+# Machine Learning
+scikit-learn
+joblib
+
+# Validation
+pydantic
+pydantic-settings
+email-validator
+
+# Utilities
+python-dotenv
+
+# Date/Time
+python-dateutil
