@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from backend.config import settings
 from backend.database.base import engine, Base
-from backend.api import auth, projects, pipelines, predictions
+from backend.api import auth, projects, pipelines, predictions, webhooks
 import logging
 
 # Configure logging
@@ -141,6 +141,7 @@ app.include_router(auth.router)
 app.include_router(projects.router)
 app.include_router(pipelines.router)
 app.include_router(predictions.router)
+app.include_router(webhooks.router)
 
 
 if __name__ == "__main__":
@@ -149,5 +150,6 @@ if __name__ == "__main__":
         "backend.main:app",
         host=settings.BACKEND_HOST,
         port=settings.BACKEND_PORT,
-        reload=settings.DEBUG
+        reload=settings.DEBUG,
+        reload_dirs=["backend"] if settings.DEBUG else None,
     )

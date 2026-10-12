@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import api from '../services/api'
 import toast from 'react-hot-toast'
 
@@ -8,9 +8,18 @@ function Pipelines() {
   const [loading, setLoading] = useState(true)
   const [showModal, setShowModal] = useState(false)
   const [selectedProject, setSelectedProject] = useState('')
+  const [showLogsModal, setShowLogsModal] = useState(false)
+  const [selectedBuildLogs, setSelectedBuildLogs] = useState(null)
+  const [logsLoading, setLogsLoading] = useState(false)
+  const intervalRef = useRef(null)
 
   useEffect(() => {
     fetchData()
+    // Auto-refresh every 5 seconds to pick up build status changes
+    intervalRef.current = setInterval(fetchData, 5000)
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+    }
   }, [])
 
   const fetchData = async () => {
@@ -23,8 +32,11 @@ function Pipelines() {
       setProjects(projectsRes.data)
       setLoading(false)
     } catch (error) {
-      toast.error('Failed to load data')
-      setLoading(false)
+      // Only show error on initial load
+      if (loading) {
+        toast.error('Failed to load data')
+        setLoading(false)
+      }
     }
   }
 
@@ -40,12 +52,36 @@ function Pipelines() {
         branch: 'main',
         triggered_by: 'manual'
       })
-      toast.success('Build triggered successfully!')
+      toast.success('Build triggered successfully! It will run in the background.')
       setShowModal(false)
       setSelectedProject('')
       setTimeout(fetchData, 1000)
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Failed to trigger build')
+    }
+  }
+
+  const viewLogs = async (buildId) => {
+    setLogsLoading(true)
+    setShowLogsModal(true)
+    try {
+      const response = await api.get(`/api/v1/pipelines/${buildId}/logs`)
+      setSelectedBuildLogs(response.data)
+    } catch (error) {
+      toast.error('Failed to fetch build logs')
+      setSelectedBuildLogs({ build_id: buildId, status: 'error', logs: 'Failed to load logs.' })
+    } finally {
+      setLogsLoading(false)
+    }
+  }
+
+  const cancelBuild = async (buildId) => {
+    try {
+      await api.delete(`/api/v1/pipelines/${buildId}/cancel`)
+      toast.success('Build cancelled')
+      fetchData()
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to cancel build')
     }
   }
 
@@ -77,12 +113,15 @@ function Pipelines() {
           <h1 className="text-3xl font-bold text-gray-900">Pipeline Builds</h1>
           <p className="text-gray-600 mt-1">Monitor and manage your build executions</p>
         </div>
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-        >
-          🚀 Trigger Build
-        </button>
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-gray-400">Auto-refreshes every 5s</span>
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          >
+            🚀 Trigger Build
+          </button>
+        </div>
       </div>
 
       {pipelines.length === 0 ? (
@@ -128,7 +167,7 @@ function Pipelines() {
                     {getStatusBadge(pipeline.status)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {pipeline.duration ? `${pipeline.duration}s` : '-'}
+                    {pipeline.duration ? `${pipeline.duration}s` : pipeline.status === 'running' ? '...' : '-'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     {pipeline.prediction_score ? (
@@ -141,9 +180,19 @@ function Pipelines() {
                     {pipeline.started_at ? new Date(pipeline.started_at).toLocaleString() : 'Not started'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button className="text-blue-600 hover:text-blue-800 mr-3">View Logs</button>
+                    <button
+                      onClick={() => viewLogs(pipeline.id)}
+                      className="text-blue-600 hover:text-blue-800 mr-3 font-medium"
+                    >
+                      📄 View Logs
+                    </button>
                     {(pipeline.status === 'pending' || pipeline.status === 'running') && (
-                      <button className="text-red-600 hover:text-red-800">Cancel</button>
+                      <button
+                        onClick={() => cancelBuild(pipeline.id)}
+                        className="text-red-600 hover:text-red-800 font-medium"
+                      >
+                        🚫 Cancel
+                      </button>
                     )}
                   </td>
                 </tr>
@@ -191,7 +240,7 @@ function Pipelines() {
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <p className="text-sm text-blue-800">
-                    ℹ️ The build will run on the <code className="bg-blue-100 px-2 py-1 rounded">main</code> branch with default configuration.
+                    ℹ️ The build will clone the repo from GitHub, install dependencies, and run real tests. This may take 1-3 minutes.
                   </p>
                 </div>
 
@@ -215,6 +264,64 @@ function Pipelines() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Build Logs Modal */}
+      {showLogsModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[85vh] flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b">
+              <div>
+                <h2 className="text-2xl font-bold">
+                  Build Logs {selectedBuildLogs ? `#${selectedBuildLogs.build_id}` : ''}
+                </h2>
+                {selectedBuildLogs && (
+                  <span className="text-sm mt-1 inline-block">
+                    Status: {getStatusBadge(selectedBuildLogs.status)}
+                  </span>
+                )}
+              </div>
+              <button
+                onClick={() => {
+                  setShowLogsModal(false)
+                  setSelectedBuildLogs(null)
+                }}
+                className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-auto p-6">
+              {logsLoading ? (
+                <div className="flex flex-col items-center justify-center py-12">
+                  <div className="animate-spin text-4xl mb-4">⚙️</div>
+                  <p className="text-gray-600">Loading build logs...</p>
+                </div>
+              ) : selectedBuildLogs ? (
+                <pre className="bg-gray-900 text-green-400 p-6 rounded-lg text-sm font-mono whitespace-pre-wrap overflow-auto max-h-[60vh] leading-relaxed">
+                  {selectedBuildLogs.logs || 'No logs available yet. The build may still be running.'}
+                </pre>
+              ) : (
+                <p className="text-gray-600 text-center py-8">No logs to display.</p>
+              )}
+            </div>
+
+            <div className="p-4 border-t flex justify-between items-center">
+              <p className="text-xs text-gray-500">
+                💡 Logs show the real output from cloning, dependency installation, and test execution.
+              </p>
+              {selectedBuildLogs && (selectedBuildLogs.status === 'running' || selectedBuildLogs.status === 'pending') && (
+                <button
+                  onClick={() => viewLogs(selectedBuildLogs.build_id)}
+                  className="bg-blue-100 text-blue-700 px-4 py-1 rounded text-sm hover:bg-blue-200"
+                >
+                  🔄 Refresh Logs
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}

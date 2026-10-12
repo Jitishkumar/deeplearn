@@ -75,7 +75,7 @@ class Project(ProjectBase):
     id: int
     owner_id: int
     created_at: datetime
-    updated_at: datetime
+    updated_at: Optional[datetime] = None
     total_builds: int = 0
     success_rate: float = 0.0
 

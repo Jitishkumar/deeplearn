@@ -11,6 +11,7 @@ function Layout({ children, onLogout }) {
     { path: '/pipelines', icon: '🔄', label: 'Pipelines' },
     { path: '/predictions', icon: '🤖', label: 'AI Predictions' },
     { path: '/analytics', icon: '📈', label: 'Analytics' },
+    { path: '/monitor', icon: '📡', label: 'API Monitor' },
   ]
 
   return (

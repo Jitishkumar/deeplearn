@@ -1,0 +1,109 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ai-devops-ingress
+  namespace: ai-devops
+  labels:
+    app: ai-devops-pipeline
+    component: ingress
+  annotations:
+    # Nginx Ingress Controller annotations
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    
+    # Rate limiting
+    nginx.ingress.kubernetes.io/limit-rps: "100"
+    
+    # CORS configuration
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/cors-allow-origin: "*"
+    nginx.ingress.kubernetes.io/cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization"
+    
+    # Client body size for file uploads
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    
+    # Timeouts for long-running operations (GitHub cloning, testing)
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    
+    # SSL/TLS (uncomment when you have certificates)
+    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    
+spec:
+  ingressClassName: nginx
+  rules:
+  # Frontend routes
+  - host: ai-devops.example.com  # Replace with your domain
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ai-devops-frontend-service
+            port:
+              number: 3000
+      
+      # Backend API routes
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: ai-devops-backend-service
+            port:
+              number: 8000
+      
+      - path: /docs
+        pathType: Prefix
+        backend:
+          service:
+            name: ai-devops-backend-service
+            port:
+              number: 8000
+      
+      - path: /health
+        pathType: Prefix
+        backend:
+          service:
+            name: ai-devops-backend-service
+            port:
+              number: 8000
+  
+  # TLS/SSL Configuration (uncomment when you have certificates)
+  # tls:
+  # - hosts:
+  #   - ai-devops.example.com
+  #   secretName: ai-devops-tls-cert
+
+---
+# Alternative: Simple LoadBalancer Service (if Ingress is not available)
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-devops-loadbalancer
+  namespace: ai-devops
+  labels:
+    app: ai-devops-pipeline
+    component: loadbalancer
+  annotations:
+    # AWS specific
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    # GCP specific  
+    # cloud.google.com/load-balancer-type: "External"
+spec:
+  type: LoadBalancer
+  selector:
+    app: ai-devops-pipeline
+    component: frontend
+  ports:
+  - port: 80
+    targetPort: 3000
+    name: http
+    protocol: TCP
+  - port: 443
+    targetPort: 3000
+    name: https
+    protocol: TCP

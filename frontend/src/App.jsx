@@ -7,6 +7,7 @@ import Projects from './pages/Projects'
 import Pipelines from './pages/Pipelines'
 import Analytics from './pages/Analytics'
 import Predictions from './pages/Predictions'
+import Monitor from './pages/Monitor'
 import Login from './pages/Login'
 import { getToken } from './services/auth'
 
@@ -40,7 +41,7 @@ function App() {
   return (
     <>
       <Toaster position="top-right" />
-      <Router>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Layout onLogout={handleLogout}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
@@ -48,6 +49,7 @@ function App() {
             <Route path="/pipelines" element={<Pipelines />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/predictions" element={<Predictions />} />
+            <Route path="/monitor" element={<Monitor />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Layout>

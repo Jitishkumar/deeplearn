@@ -1,6 +1,25 @@
 # 🎬 Demo Script - Practice This Word-for-Word!
 
 ## ⏱️ 10-Minute Demo Flow
+Open Terminal 1 (Backend):
+bash
+
+cd /Users/jitishkumar/Desktop/amazonsde/deeplearn
+source venv/bin/activate
+python -m backend.main
+Leave it running!
+
+Open Terminal 2 (Frontend):
+bash
+
+cd /Users/jitishkumar/Desktop/amazonsde/deeplearn/frontend
+npm run dev
+Leave it running!
+
+Open Browser:
+Go to: http://localhost:3000
+
+Login with: demo / demo123
 
 ---
 

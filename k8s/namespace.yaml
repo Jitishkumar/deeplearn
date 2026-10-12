@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ai-devops
+  labels:
+    app: ai-devops-pipeline
+    environment: production
+    version: v2.0.0
+    created-by: final-year-project
+  annotations:
+    description: "AI-Powered DevOps Pipeline - Production Kubernetes Deployment"
+    contact: "student@university.edu"

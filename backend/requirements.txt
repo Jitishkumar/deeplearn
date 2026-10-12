@@ -28,3 +28,8 @@ python-dotenv
 
 # Date/Time
 python-dateutil
+
+# GitHub Integration & Testing
+requests  # For GitHub API calls
+pytest    # For running Python tests
+httpx     # For async HTTP requests
