@@ -35,7 +35,7 @@ def execute_pipeline(build_id: int, db: Session):
         logs = []
         logs.append(f"🚀 === REAL BUILD #{build_id} Started at {build.started_at} ===\n")
         logs.append(f"📋 Project ID: {build.project_id}\n")
-        logs.append(f"🌿 Branch: {build.branch}\n")
+        # Branch will be detected after cloning
         logs.append(f"👤 Triggered by: {build.triggered_by}\n\n")
         
         # Get project info to find GitHub URL
@@ -62,8 +62,24 @@ def execute_pipeline(build_id: int, db: Session):
         # Step 1: Clone Repository
         logs.append("\n>>> Step 1: Cloning Repository from GitHub\n")
         try:
-            workspace_path, clone_logs = github_service.clone_repository(repo_url, build.branch)
+            # Clone without specifying branch - let git detect the default
+            workspace_path, clone_logs = github_service.clone_repository(repo_url, branch=None)
             logs.extend([log + "\n" for log in clone_logs])
+            
+            # Detect actual branch that was cloned
+            import subprocess
+            branch_cmd = ["git", "rev-parse", "--abbrev-ref", "HEAD"]
+            branch_result = subprocess.run(
+                branch_cmd,
+                capture_output=True,
+                text=True,
+                cwd=workspace_path
+            )
+            
+            if branch_result.returncode == 0:
+                actual_branch = branch_result.stdout.strip()
+                build.branch = actual_branch  # Update build record with actual branch
+                logs.append(f"✅ Detected branch: {actual_branch}\n")
             
             # Step 2: Detect Project Type
             logs.append("\n>>> Step 2: Analyzing Project Structure\n")

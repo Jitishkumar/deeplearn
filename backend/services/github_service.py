@@ -111,7 +111,7 @@ class GitHubService:
                 "last_updated": None
             }
     
-    def clone_repository(self, repo_url: str, branch: str = "main") -> Tuple[str, List[str]]:
+    def clone_repository(self, repo_url: str, branch: str = None) -> Tuple[str, List[str]]:
         """Clone repository to temporary directory and return path + logs"""
         logs = []
         
@@ -120,17 +120,26 @@ class GitHubService:
         logs.append(f"📁 Created workspace: {temp_dir}")
         
         try:
-            # Clone the repository
-            logs.append(f"🔄 Cloning {repo_url} (branch: {branch})...")
+            # If no branch specified, clone without branch flag (gets default branch)
+            logs.append(f"🔄 Cloning {repo_url}...")
             
-            clone_cmd = [
-                "git", "clone", 
-                "--branch", branch,
-                "--single-branch",
-                "--depth", "1",
-                repo_url, 
-                temp_dir
-            ]
+            if branch:
+                clone_cmd = [
+                    "git", "clone", 
+                    "--branch", branch,
+                    "--single-branch",
+                    "--depth", "1",
+                    repo_url, 
+                    temp_dir
+                ]
+            else:
+                # Clone without specifying branch - git will use the default branch
+                clone_cmd = [
+                    "git", "clone", 
+                    "--depth", "1",
+                    repo_url, 
+                    temp_dir
+                ]
             
             result = subprocess.run(
                 clone_cmd,
@@ -141,6 +150,19 @@ class GitHubService:
             
             if result.returncode == 0:
                 logs.append("✅ Repository cloned successfully!")
+                
+                # Get current branch name
+                branch_cmd = ["git", "rev-parse", "--abbrev-ref", "HEAD"]
+                branch_result = subprocess.run(
+                    branch_cmd,
+                    capture_output=True,
+                    text=True,
+                    cwd=temp_dir
+                )
+                
+                if branch_result.returncode == 0:
+                    current_branch = branch_result.stdout.strip()
+                    logs.append(f"📌 Using branch: {current_branch}")
                 
                 # Get commit info
                 commit_cmd = ["git", "log", "-1", "--pretty=format:%h %s"]

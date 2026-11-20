@@ -28,7 +28,9 @@ function Pipelines() {
         api.get('/api/v1/pipelines'),
         api.get('/api/v1/projects')
       ])
-      setPipelines(pipelinesRes.data)
+      // Sort pipelines in descending order (latest first)
+      const sortedPipelines = pipelinesRes.data.sort((a, b) => b.id - a.id)
+      setPipelines(sortedPipelines)
       setProjects(projectsRes.data)
       setLoading(false)
     } catch (error) {
@@ -82,6 +84,20 @@ function Pipelines() {
       fetchData()
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Failed to cancel build')
+    }
+  }
+
+  const deleteBuild = async (buildId) => {
+    if (!window.confirm('Are you sure you want to delete this build? This action cannot be undone.')) {
+      return
+    }
+    
+    try {
+      await api.delete(`/api/v1/pipelines/${buildId}`)
+      toast.success('Build deleted successfully')
+      fetchData()
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to delete build')
     }
   }
 
@@ -180,20 +196,28 @@ function Pipelines() {
                     {pipeline.started_at ? new Date(pipeline.started_at).toLocaleString() : 'Not started'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button
-                      onClick={() => viewLogs(pipeline.id)}
-                      className="text-blue-600 hover:text-blue-800 mr-3 font-medium"
-                    >
-                      📄 View Logs
-                    </button>
-                    {(pipeline.status === 'pending' || pipeline.status === 'running') && (
+                    <div className="flex items-center space-x-2">
                       <button
-                        onClick={() => cancelBuild(pipeline.id)}
+                        onClick={() => viewLogs(pipeline.id)}
+                        className="text-blue-600 hover:text-blue-800 font-medium"
+                      >
+                        📄 Logs
+                      </button>
+                      {(pipeline.status === 'pending' || pipeline.status === 'running') && (
+                        <button
+                          onClick={() => cancelBuild(pipeline.id)}
+                          className="text-orange-600 hover:text-orange-800 font-medium"
+                        >
+                          🚫 Cancel
+                        </button>
+                      )}
+                      <button
+                        onClick={() => deleteBuild(pipeline.id)}
                         className="text-red-600 hover:text-red-800 font-medium"
                       >
-                        🚫 Cancel
+                        🗑️ Delete
                       </button>
-                    )}
+                    </div>
                   </td>
                 </tr>
               ))}

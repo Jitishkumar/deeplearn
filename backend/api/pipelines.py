@@ -144,6 +144,39 @@ def cancel_pipeline(
     return schemas.MessageResponse(message="Build cancelled successfully")
 
 
+@router.delete("/{build_id}", response_model=schemas.MessageResponse)
+def delete_build(
+    build_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
+):
+    """Delete a build permanently"""
+    build = db.query(Build).join(Project).filter(
+        Build.id == build_id,
+        Project.owner_id == current_user.id
+    ).first()
+    
+    if not build:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Build not found"
+        )
+    
+    # Delete associated metrics first (if any)
+    from backend.models.database_models import BuildMetrics
+    db.query(BuildMetrics).filter(BuildMetrics.build_id == build_id).delete()
+    
+    # Delete the build
+    db.delete(build)
+    db.commit()
+    
+    # Update project statistics
+    from backend.services.pipeline_executor import update_project_stats
+    update_project_stats(db, build.project_id)
+    
+    return schemas.MessageResponse(message="Build deleted successfully")
+
+
 @router.get("/{build_id}/logs")
 def get_pipeline_logs(
     build_id: int,
