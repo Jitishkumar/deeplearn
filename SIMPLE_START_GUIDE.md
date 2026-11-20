@@ -44,8 +44,8 @@ npm run dev
 1. Open your browser
 2. Go to: **http://localhost:3000**
 3. Login with:
-   - **Username:** demo
-   - **Password:** demo123
+   - **Username:** iamjitishkr
+   - **Password:** jitish123
 
 ---
 
@@ -144,7 +144,7 @@ python3 -m backend.main
 You'll know it's working when:
 - ✅ Backend shows "Uvicorn running"
 - ✅ Frontend shows "Local: http://localhost:3000"
-- ✅ Can login with demo/demo123
+- ✅ Can login with iamjitishkr/jitish123
 - ✅ Dashboard shows 60 builds
 - ✅ Can add GitHub repository
 - ✅ Can see real test logs when triggering build

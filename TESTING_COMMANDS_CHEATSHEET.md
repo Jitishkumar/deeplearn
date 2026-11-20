@@ -23,7 +23,7 @@ npm run dev
 ## 🌐 Open & Test
 
 1. **Open:** http://localhost:3000
-2. **Login:** demo / demo123
+2. **Login:** demo / jitish123
 3. **Click:** Projects → Add from GitHub
 4. **Use:** `https://github.com/realpython/python-testing-101`
 5. **Click:** Pipelines → Trigger Build
@@ -75,7 +75,7 @@ cd frontend && rm -rf node_modules && npm install
 
 - [ ] Backend running on port 8000
 - [ ] Frontend running on port 3000
-- [ ] Can login (demo/demo123)
+- [ ] Can login (iamjitishkr/jitish123)
 - [ ] Dashboard shows 60 builds
 - [ ] Can add GitHub repo
 - [ ] Can trigger build

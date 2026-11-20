@@ -111,8 +111,8 @@ You should see a login page.
 
 **Login credentials:**
 ```
-Username: demo
-Password: demo123
+Username: iamjitishkr
+Password: jitish123
 ```
 
 Click "Login"
@@ -329,7 +329,7 @@ npm run dev
 
 # Browser
 # 1. Open http://localhost:3000
-# 2. Login: demo / demo123
+# 2. Login: iamjitishkr / jitish123
 # 3. Click Projects → Add from GitHub
 # 4. Use: https://github.com/realpython/python-testing-101
 # 5. Click Pipelines → Trigger Build
@@ -344,7 +344,7 @@ npm run dev
 
 - [ ] Backend starts without errors
 - [ ] Frontend starts without errors
-- [ ] Can login with demo/demo123
+- [ ] Can login with iamjitishkr/jitish123
 - [ ] Dashboard shows 60 builds
 - [ ] Can add GitHub repository
 - [ ] Can trigger build
@@ -479,8 +479,8 @@ cd frontend && npm run dev
 open http://localhost:3000
 
 # Login
-Username: demo
-Password: demo123
+Username: iamjitishkr
+Password: jitish123
 
 # Test GitHub integration
 Projects → Add from GitHub → Use demo repo

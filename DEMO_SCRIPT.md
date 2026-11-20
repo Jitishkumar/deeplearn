@@ -19,7 +19,7 @@ Leave it running!
 Open Browser:
 Go to: http://localhost:3000
 
-Login with: demo / demo123
+Login with: iamjitishkr / jitish123
 
 ---
 
@@ -30,8 +30,8 @@ Login with: demo / demo123
 
 **What to Do:**
 1. Open browser to `http://localhost:3000`
-2. Enter username: `demo`
-3. Enter password: `demo123`
+2. Enter username: `iamjitishkr`
+3. Enter password: `jitish123`
 4. Click Login
 
 **What to Point Out:**

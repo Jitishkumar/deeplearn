@@ -37,10 +37,10 @@ def create_sample_data():
         
         # Create demo user
         demo_user = User(
-            email="demo@devops-pipeline.com",
-            username="demo",
-            full_name="Demo User",
-            hashed_password=get_password_hash("demo123"),
+            email="iamjitishkr@devops-pipeline.com",
+            username="iamjitishkr",
+            full_name="Jitish Kumar",
+            hashed_password=get_password_hash("jitish123"),
             is_active=True
         )
         db.add(demo_user)
@@ -155,8 +155,8 @@ def create_sample_data():
         print("Sample data created successfully!")
         print("="*60)
         print("\nLogin Credentials:")
-        print("  Username: demo")
-        print("  Password: demo123")
+        print("  Username: iamjitishkr")
+        print("  Password: jitish123")
         print("\nAPI Documentation: http://localhost:8000/docs")
         print("="*60)
         

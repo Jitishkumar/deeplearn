@@ -154,7 +154,7 @@ npm run dev
 ```
 
 **Access:** http://localhost:3000  
-**Login:** Username: `demo`, Password: `demo123`
+**Login:** Username: `iamjitishkr`, Password: `jitish123`
 
 ---
 

@@ -50,8 +50,8 @@ Creating sample data...
 ✓ Database initialization complete!
 
 Login Credentials:
-  Username: demo
-  Password: demo123
+  Username: iamjitishkr
+  Password: jitish123
 ```
 
 ### Step 3: Start Backend Server
@@ -106,7 +106,7 @@ npm run dev
 1. Open your browser and go to: **http://localhost:3000**
 2. Login with demo credentials:
    - **Username:** `demo`
-   - **Password:** `demo123`
+   - **Password:** `jitish123`
 
 🎉 **You're all set!**
 

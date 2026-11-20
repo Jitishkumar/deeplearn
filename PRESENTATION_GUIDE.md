@@ -125,7 +125,7 @@ AI-Powered DevOps Pipeline:
 [Navigate to http://localhost:3000]
 
 First, I'll login with demo credentials...
-[Login: demo / demo123]
+[Login: iamjitishkr / jitish123]
 
 And here's our real-time dashboard showing:
 - 60 total builds across 3 projects
@@ -411,7 +411,7 @@ Business Impact:
 - [ ] Test on presentation computer
 - [ ] Start both servers
 - [ ] Open http://localhost:3000 in browser
-- [ ] Login with demo/demo123
+- [ ] Login with iamjitishkr/jitish123
 - [ ] Have backup screenshots ready
 
 ### During Presentation:

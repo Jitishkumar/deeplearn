@@ -16,7 +16,7 @@ npm run dev
 open http://localhost:3000
 ```
 
-**Login:** demo / demo123
+**Login:** demo / jitish123
 
 ---
 
@@ -38,7 +38,7 @@ docker-compose -f docker-compose.dev.yml up -d
 ## 📋 What to Show Your Teacher
 
 ### 1. Dashboard (30 sec)
-- Login with demo/demo123
+- Login with iamjitishkr/jitish123
 - Show real-time statistics
 - Point out AI predictions
 
@@ -205,7 +205,7 @@ docker-compose logs backend | tail -50
 
 - [ ] Backend running (http://localhost:8000/health shows "healthy")
 - [ ] Frontend running (http://localhost:3000 loads)
-- [ ] Can login (demo/demo123)
+- [ ] Can login (iamjitishkr/jitish123)
 - [ ] Database has sample data (60 builds visible)
 - [ ] Docker installed (docker --version works)
 - [ ] Git installed (git --version works)

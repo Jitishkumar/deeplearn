@@ -38,7 +38,7 @@ npm run dev
 
 # Open browser
 open http://localhost:3000
-Login: demo / demo123
+Login: iamjitishkr / jitish123
 ```
 
 ---
@@ -91,7 +91,7 @@ It has:
 ## 🎬 Want to See It Work?
 
 1. Start the app (see Quick Start above)
-2. Login (demo/demo123)
+2. Login (iamjitishkr/jitish123)
 3. Click "Projects" → "Add from GitHub"
 4. Use: `https://github.com/realpython/python-testing-101`
 5. Click "Add & Test"

@@ -30,7 +30,7 @@
 ### Software Check:
 - [ ] Backend starts: `python -m backend.main`
 - [ ] Frontend starts: `cd frontend && npm run dev`
-- [ ] Can login: demo / demo123
+- [ ] Can login: demo / jitish123
 - [ ] Dashboard shows data (60 builds)
 - [ ] API health check: `curl http://localhost:8000/health`
 
@@ -56,7 +56,7 @@
 
 ### Minute 1: Introduction (0:00 - 1:00)
 - [ ] Show dashboard
-- [ ] Login (demo/demo123)
+- [ ] Login (iamjitishkr/jitish123)
 - [ ] Point to key stats: "87% success rate, 60 builds"
 - [ ] Mention: "AI-powered predictions, real GitHub integration"
 

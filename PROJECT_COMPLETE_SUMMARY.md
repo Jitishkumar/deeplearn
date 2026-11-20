@@ -285,7 +285,7 @@ python -m backend.main
 cd frontend && npm run dev
 
 # Open: http://localhost:3000
-# Login: demo / demo123
+# Login: iamjitishkr / jitish123
 ```
 
 ### Docker Mode:

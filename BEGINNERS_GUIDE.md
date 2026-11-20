@@ -67,8 +67,8 @@ VITE v5.4.21  ready in 833 ms
 3. You'll see the login page
 
 **Login with:**
-- Username: `demo`
-- Password: `demo123`
+- Username: `iamjitishkr`
+- Password: `jitish123`
 
 ---
 
@@ -93,7 +93,7 @@ This is a **SQLite database file** - like an Excel file but for applications.
 ### Current Data in Database:
 
 When you initialized the database, it created:
-- **1 demo user** (demo/demo123)
+- **1 demo user** (iamjitishkr/jitish123)
 - **3 sample projects** (Python, Node.js, Java)
 - **60 sample builds** (to show how the system works)
 
@@ -230,7 +230,7 @@ The system gives you recommendations:
 
 ### A. View Existing Projects
 
-1. Login with demo/demo123
+1. Login with iamjitishkr/jitish123
 2. Click **"Projects"** in sidebar
 3. You'll see 3 projects:
    - `python-web-app` - 20 builds, 78% success
@@ -482,7 +482,7 @@ npm run dev
 **Browser:**
 ```
 http://localhost:3000
-Login: demo / demo123
+Login: iamjitishkr / jitish123
 ```
 
 ---
@@ -573,7 +573,7 @@ Analytics = Statistics and insights
 
 **Remember:**
 1. Start both servers (backend + frontend)
-2. Login with demo/demo123
+2. Login with iamjitishkr/jitish123
 3. Your data is saved permanently in database
 4. 3 projects and 60 builds already exist for demo
 5. AI predictions are the STAR feature!

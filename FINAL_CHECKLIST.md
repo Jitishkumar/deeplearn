@@ -23,7 +23,7 @@ Wait for: "Local: http://localhost:3000"
 
 **Browser:**
 1. Open http://localhost:3000
-2. Login: demo / demo123
+2. Login: iamjitishkr / jitish123
 3. Test every page!
 
 ---

@@ -33,7 +33,7 @@
 ### Part 1: Show the Dashboard (30 seconds)
 ```
 1. Open http://localhost:3000
-2. Login: demo / demo123
+2. Login: iamjitishkr / jitish123
 3. Point to key metrics:
    - "87% success rate with 60 builds"
    - "Real-time statistics updating"
